@@ -45,7 +45,7 @@ def qr_generator(number,name,url):
     font = ImageFont.truetype(font_path, 20)
     num = number
 
-    draw.text((15, draw_h), name, font=font, fill='#000000')      
+    draw.text((15, draw_h), str(name), font=font, fill='#000000')      
     img_add.save('./my_qr_code/' + number + '.png', quality=95)
 
 def select_csv():
@@ -89,7 +89,7 @@ def main():
     df_url = df['url']    
     # make QR code
     for number in range(int(len(df))):
-        qr_generator(str(1000+number),df_name[number],df_url[number])  
+        qr_generator(str(10000+number),df_name[number],df_url[number])  
    
 
 if __name__ == '__main__':
