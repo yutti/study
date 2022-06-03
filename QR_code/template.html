@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <title>本のリスト</title>
+</head>
+<body>
+<div class="container">
+        <table class="table mt-5 table-bordered border-primary " id="tb">
+        </table>
+</div>
+    <script>
+        const HTTP_PORT = 8080
+        const WS_PORT = 8081
+
+        let wss = new WebSocket('ws://localhost:' + WS_PORT)
+        wss.onmessage = function (e) {
+            $('#'+ e.data).removeClass('bg-danger').addClass('bg-success').text('OK')
+        }
+
+        $.ajax({
+            url: 'http://localhost:' + HTTP_PORT,
+            type: 'POST',
+            dataType: 'json',
+        }).then(
+            function (data) {
+                let elem = '<tr><th>タイトル</th><th>識別コード</th><th>状況</th></tr>'
+
+                
+                $.each(data, function (key, item) {
+                    let bc
+                    let status
+                    if(item.status === 1){
+                        bc = 'bg-success'
+                        status = 'OK'
+                    }else{
+                        bc = 'bg-danger'
+                        status = 'NG'
+                    }
+                    elem += '<tr>'
+                    elem += '<td>' + item.name + '</td>'
+                    elem += '<td>' + item.code + '</td>'
+                    elem += '<td class="' + bc + '" id="' + item.code +'">' + status + '</td>'
+                    elem += '</tr>'
+                })
+
+                $('#tb').html(elem)
+            })
+    </script>
+</body>
+</html>
