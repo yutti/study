@@ -16,8 +16,8 @@ def make_table(cur):
         ("はひふへほ",10006, 0),
         ("まみむめも",10007, 0),
         ("やゆよ",10008, 0),
-        ("らりるれろ",10008, 0),
-        ("わをん",10009, 0)
+        ("らりるれろ",10009, 0),
+        ("わをん",10010, 0)
     ]
     # execute many data 
     cur.executemany('INSERT INTO bookitems values(?, ?, ?)', inserts)
