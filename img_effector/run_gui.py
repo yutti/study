@@ -35,11 +35,11 @@ class Set_gui():
         self.canvas_frame.place(relx=0.05, rely=0.05)          
  
         # 1. Set file path
-        self.imp_path_btn   = tk.Button(self.filepath_frame, text="Select_file", command=self.file_select)
+        self.imp_path_btn   = tk.Button(self.filepath_frame, text="Select_image_file", command=self.display_image_in_canvas)
         self.imp_path_btn.grid(row=0, column=0, sticky=tk.W , padx=10, pady = 5)
 
-        self.img_path = tk.StringVar()
-        self.imp_path_box   = tk.Entry(self.filepath_frame, textvariable=self.img_path, width=70)
+        self.img_path_in_box = tk.StringVar()
+        self.imp_path_box   = tk.Entry(self.filepath_frame, textvariable=self.img_path_in_box, width=70)
         self.imp_path_box.grid(row=1, column=0, sticky=tk.EW, padx=10)
   
         # 2. Set Function botton
@@ -57,24 +57,12 @@ class Set_gui():
             label.grid(row=0, column=i,sticky=tk.W + tk.E)               
 
         # 3.2 canvas_frame title
-        # from PIL import ImageTk
-        self.base_img   = Image.open('lenna.png')  # POR image 
-        self.effect_img = self.base_img            # Effect image
+        self.base_img_canvas   = tk.Canvas(self.canvas_frame, width=500, height=500, bg = "#A9A9A9")
+        self.base_img_canvas.grid(row=1, column=0)
         
-        self.pil_base_img   = ImageTk.PhotoImage(self.base_img)
-        self.pil_effect_img = ImageTk.PhotoImage(self.effect_img)
-
-        self.base_img_label = tk.Label(self.canvas_frame, image=self.pil_base_img)
-        self.base_img_label.grid(row=1, column=0)
-
-        # canvas
-        self.effect_img_canvas = tk.Canvas(self.canvas_frame, width=self.effect_img.width, height=self.effect_img.height)
+        self.effect_img_canvas = tk.Canvas(self.canvas_frame, width=500, height=500, bg = "#A9A9A9")
         self.effect_img_canvas.grid(row=1, column=1)
-
-        # canvasに初期画像を表示
-        self.effect_img_canvas.photo = ImageTk.PhotoImage(self.effect_img)
-        self.effect_img_on_canvas = self.effect_img_canvas.create_image(0, 0, anchor='nw', image=self.effect_img_canvas.photo)
-        
+       
         # 4 set to close the window
         self.button = tk.Button(self.exit_frame, text='Exit', width=10, command=self.on_click_close)
         self.button.grid(row=0, column=0, sticky=tk.SE, padx = 10, pady = 10)
@@ -83,15 +71,40 @@ class Set_gui():
     def on_click_close(self):
         self.main_window.destroy()
         
+    def display_image_in_canvas(self):
+        self.img_path   = self.file_select()
+        self.effect_img = self.resize_image(self.img_path)
+
+    def resize_image(self, im_path):
+        img = Image.open(im_path)
+        w = img.width 
+        h = img.height 
+        self.w_offset = 250-(w*(500/h)/2)
+        self.h_offset = 250-(h*(500/w)/2)
+        
+        if w > h:
+            img = img.resize(( int(w * (500/w)), int(h * (500/w)) ))
+        else:
+            img = img.resize(( int(w * (500/h)), int(h * (500/h)) ))
+       
+        self.pil_base_img   = ImageTk.PhotoImage(img)
+        self.pil_effect_img = self.pil_base_img
+
+        if w > h:
+            self.base_img_canvas = self.base_img_canvas.create_image(0, self.h_offset, anchor='nw', image=self.pil_base_img)
+            self.effect_img_on_canvas = self.effect_img_canvas.create_image(0, self.h_offset, anchor='nw', image=self.pil_effect_img)
+        else:
+            self.base_img_canvas = self.base_img_canvas.create_image(self.w_offset, 0, anchor='nw', image=self.pil_base_img)
+            self.effect_img_on_canvas = self.effect_img_canvas.create_image(self.w_offset, 0, anchor='nw', image=self.pil_effect_img)
+       
+        return img
+       
     def file_select(self):
-        self.filename = filedialog.askopenfilename(title = "Please select image file,",filetypes =  self.file_filter)
-        if self.filename:
-            self.img_path.set(self.filename)
-        img_file = self.control.file_set(self.filename)
+        img_file_path = filedialog.askopenfilename(title = "Please select image file,",filetypes =  self.file_filter)
+        self.img_path_in_box.set(img_file_path)
+        return img_file_path
 
     def effect_event(self, arg):
-        #print(self.func_combobox.get(), arg)
-        #print(self.func_combobox.current(), self.func_combobox.get())
         
         # gary scale
         if self.func_combobox.current() <= 3:
