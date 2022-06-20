@@ -1,7 +1,5 @@
-import sys
 import tkinter as tk
-from tkinter import ttk, filedialog
-
+from tkinter import ttk
 from GUI_control import GUI_control
 from PIL import Image, ImageTk, ImageOps
 
@@ -13,8 +11,9 @@ class Set_gui():
         self.control = GUI_control()
          
         # Variable setting
-        #self.file_filter = [("Image file", ".bmp .png .jpg .tif")]
-        self.function_btn =["Gray_scale","Binarization","Sepia"]        
+        self.function_btn =["Gray_scale","Binarization","Sepia","Jagged_mosaic","Soft_mosaic","Quantize",
+                            "Invert","Mirror","Flip","Posterize","Solarize","Equalize","Counter","Emboss",
+                            "Find_emboss"]        
         self.canvas_title =["Base","Effect"]
         
         # Main window
@@ -49,8 +48,6 @@ class Set_gui():
         self.func_combobox.bind("<<ComboboxSelected>>", self.effect_event)
         self.func_combobox.pack()
         
-        # 3. Set canvas_frame
-
         # 3.1 canvas_frame title
         for i in range(2):
             label = tk.Label(self.canvas_frame, text=self.canvas_title[i], bg="white", relief=tk.RIDGE)
@@ -74,15 +71,11 @@ class Set_gui():
     def draw_default_image(self):
         self.img_path   = self.control.get_image_path()
         self.img_path_stvar.set(self.img_path)
-        
-        self.effect_img , self.base_canvas, self.effect_canvas_create = self.control.resize_image(self.img_path,self.base_canvas,self.effect_canvas)
+
+        self.effect_img , self.base_canvas, self.effect_canvas_create = self.control.draw_image(self.img_path,self.base_canvas,self.effect_canvas)
 
     def effect_event(self, arg):
-       
-        combo_func_no   = self.func_combobox.current()
-        combo_func_name = self.func_combobox.get() 
-        
-        self.converted_img = self.control.effect_image(combo_func_no,combo_func_name, self.effect_img)
+        self.converted_img = self.control.effect_image(self.effect_img, self.func_combobox)
         self.replace_effect_image(self.converted_img)
   
     def replace_effect_image(self, pic_img):
