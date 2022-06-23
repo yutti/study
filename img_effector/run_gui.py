@@ -14,6 +14,7 @@ class Set_gui:
 
         # Variable setting
         self.function_btn = [
+            "Default",
             "Gray_scale",
             "Binarization",
             "Sepia",

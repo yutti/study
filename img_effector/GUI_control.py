@@ -22,7 +22,7 @@ class GUI_control:
         func_no = func_combobox.current()
         func_name = func_combobox.get()
 
-        if func_no <= 2:
+        if func_no <= 3 and func_no >= 1:
             convert_img = self.model.retouch_gray_scale(effect_img)
 
             if func_name == "Gray_scale":
@@ -33,6 +33,9 @@ class GUI_control:
 
             elif func_name == "Sepia":
                 converted_img = self.model.retouch_sepia(convert_img)
+
+        elif func_name == "Default":
+            converted_img = effect_img
 
         elif func_name == "Jagged_mosaic":
             converted_img = self.model.retouch_jagged_mosaic(effect_img)
