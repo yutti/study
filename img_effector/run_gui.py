@@ -47,7 +47,7 @@ class Set_gui:
         # Widgetsmith
         self.filepath_frame.place(relx=0.05, rely=0.8)
         self.func_frame.place(relx=0.85, rely=0.15)
-        self.exit_frame.place(relx=0.85, rely=0.8)
+        self.exit_frame.place(relx=0.85, rely=0.7)
         self.canvas_frame.place(relx=0.05, rely=0.05)
 
         # 1. Set file path
@@ -98,12 +98,22 @@ class Set_gui:
         self.effect_canvas.grid(row=1, column=1)
 
         # 4 set to close the window
+
         self.button = tk.Button(
-            self.exit_frame, text="Exit", width=10, command=self.on_click_close
+            self.exit_frame, text="Save", width=10, command=self.on_click_save
         )
         self.button.grid(row=0, column=0, sticky=tk.SE, padx=10, pady=10)
 
+        self.button = tk.Button(
+            self.exit_frame, text="Exit", width=10, command=self.on_click_close
+        )
+        self.button.grid(row=1, column=0, sticky=tk.SE, padx=10, pady=10)
+
     # Function for closing window
+    def on_click_save(self):
+        self.img_path_var = self.img_path_stvar.get()
+        self.control.save_image_action(self.converted_img, self.img_path_var)
+
     def on_click_close(self):
         self.main_window.destroy()
 

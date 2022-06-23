@@ -7,6 +7,9 @@ class GUI_control:
 
     # Function for closing window
 
+    def save_image_action(self, save_img, path_bar):
+        self.model.save_image(save_img, path_bar)
+
     def get_image_path(self):
         img_file_path = self.model.get_path()
         return img_file_path

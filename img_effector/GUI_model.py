@@ -1,6 +1,7 @@
+import os
 from tkinter import filedialog
 from tkinter.filedialog import askopenfile
-
+from datetime import datetime
 from PIL import Image, ImageFilter, ImageOps, ImageTk
 
 
@@ -12,6 +13,16 @@ class GUI_model:
         return filedialog.askopenfilename(
             title="Please select image file,", filetypes=self.file_filter
         )
+
+    def save_image(self, save_img, path_var):
+
+        if save_img != None:
+            name, ext = os.path.splitext(path_var)
+            dt = datetime.now()
+            fpath = name + "_" + dt.strftime("%H%M%S") + ".png"
+
+            save_img.save(fpath)
+            print("Saved: {}".format(fpath))
 
     def resize_image(self, path, base_canvas, effect_canvas):
 
