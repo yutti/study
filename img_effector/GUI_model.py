@@ -2,7 +2,7 @@ import os
 from tkinter import filedialog
 from tkinter.filedialog import askopenfile
 from datetime import datetime
-from PIL import Image, ImageFilter, ImageOps, ImageTk
+from PIL import Image, ImageFilter, ImageOps, ImageTk, ImageEnhance
 
 
 class GUI_model:
@@ -22,7 +22,7 @@ class GUI_model:
             fpath = name + "_" + dt.strftime("%H%M%S") + ".png"
 
             save_img.save(fpath)
-            print("Saved: {}".format(fpath))
+            # print("Saved: {}".format(fpath))
 
     def resize_image(self, path, base_canvas, effect_canvas):
 
@@ -125,4 +125,22 @@ class GUI_model:
 
     def retouch_findemboss(self, ef_img):
         converted_img = ef_img.filter(ImageFilter.FIND_EDGES)
+        return converted_img
+
+    # def retouch_color_balance(self, ef_img,value):
+    #    enhancer = ImageEnhance.Color(ef_img)
+    ##    converted_img = enhancer.enhance(float(value))
+    #    return converted_img
+
+    def retouch_scale_items(
+        self, ef_img, color_value, contrast_value, brightnes_value, sharpness_value
+    ):
+        enhancer = ImageEnhance.Color(ef_img)
+        temp_img = enhancer.enhance(float(color_value))
+        enhancer = ImageEnhance.Contrast(temp_img)
+        temp_img = enhancer.enhance(float(contrast_value))
+        enhancer = ImageEnhance.Brightness(temp_img)
+        temp_img = enhancer.enhance(float(brightnes_value))
+        enhancer = ImageEnhance.Sharpness(temp_img)
+        converted_img = enhancer.enhance(float(sharpness_value))
         return converted_img

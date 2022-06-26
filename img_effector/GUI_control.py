@@ -10,6 +10,14 @@ class GUI_control:
     def save_image_action(self, save_img, path_bar):
         self.model.save_image(save_img, path_bar)
 
+    def adjust_color_balance(
+        self, effect_img, color_value, contrast_value, brightnes_value, sharpness_value
+    ):
+        converted_img = self.model.retouch_scale_items(
+            effect_img, color_value, contrast_value, brightnes_value, sharpness_value
+        )
+        return converted_img
+
     def get_image_path(self):
         img_file_path = self.model.get_path()
         return img_file_path
