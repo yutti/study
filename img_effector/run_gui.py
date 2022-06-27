@@ -33,7 +33,7 @@ class Set_gui:
             "Find_emboss",
         ]
         self.canvas_title = ["Base", "Effect"]
-        self.scale_effect =["Color Balance","Contrast","Brightnes","Sharpness"]
+        self.scale_effect = ["Color Balance", "Contrast", "Brightnes", "Sharpness"]
 
         # Main window
         self.main_window = main_window
@@ -54,17 +54,17 @@ class Set_gui:
         self.scale_frame.place(relx=0.80, rely=0.25)
         self.opr_frame.place(relx=0.80, rely=0.75)
 
-        # 1.1 canvas_frame title
+        # 1.1 canvas_frame (label)
         self.set_up_canvas_label(self.canvas_frame)
 
-        # 1.2 canvas_frame title
-        self.base_canvas   = self.set_up_canvas_frame(self.canvas_frame)
+        # 1.2 canvas_frame (canvas)
+        self.base_canvas = self.set_up_canvas_frame(self.canvas_frame)
         self.base_canvas.grid(row=1, column=0)
 
         self.effect_canvas = self.set_up_canvas_frame(self.canvas_frame)
         self.effect_canvas.grid(row=1, column=1)
 
-        # 2. Set file path
+        # 2. filepath_frame
         self.img_path_btn = tk.Button(
             self.filepath_frame,
             text="Select_image_file",
@@ -78,7 +78,7 @@ class Set_gui:
         )
         self.img_path_entry.grid(row=1, column=0, sticky=tk.EW, padx=10)
 
-        # 3. Set Function botton
+        # 3. func_frame
         self.func_combobox = ttk.Combobox(
             self.func_frame,
             text="combo_file",
@@ -90,52 +90,45 @@ class Set_gui:
         self.func_combobox.bind("<<ComboboxSelected>>", self.effect_event)
         self.func_combobox.pack()
 
-        # 4. Set Scale botton
-        # 4. create label 
+        # 4.1 scale_frame (label)
         self.set_up_scale_label(self.scale_frame)
-        
-        # 4.1 Color Balance
-        self.color_scale= self.set_up_scale(self.scale_frame, 1)
+
+        # 4.2 scale_frame (botton)
+        self.color_scale = self.set_up_scale(self.scale_frame, 1)
         self.color_scale.grid(row=0, column=1, sticky=tk.W, padx=10, pady=10)
 
-        # 4.2 Contrast
         self.contrast_scale = self.set_up_scale(self.scale_frame, 1)
         self.contrast_scale.grid(row=1, column=1, sticky=tk.W, padx=10, pady=10)
 
-        # 4.3 Brightnes
         self.brightnes_scale = self.set_up_scale(self.scale_frame, 1)
         self.brightnes_scale.grid(row=2, column=1, sticky=tk.W, padx=10, pady=10)
 
-        # 4.4 Sharpness
         self.sharpness_scale = self.set_up_scale(self.scale_frame, 2)
         self.sharpness_scale.grid(row=3, column=1, sticky=tk.W, padx=10, pady=10)
 
-        # 5 set to close the window
-        self.button = self.set_up_opr_btn(self.opr_frame,"Save", self.on_click_save)
+        # 5 opr_frame
+        self.button = self.set_up_opr_btn(self.opr_frame, "Save", self.on_click_save)
         self.button.grid(row=0, column=0, sticky=tk.SE, padx=10, pady=10)
 
-        self.button = self.set_up_opr_btn(self.opr_frame,"Exit", self.on_click_close)
+        self.button = self.set_up_opr_btn(self.opr_frame, "Exit", self.on_click_close)
         self.button.grid(row=0, column=1, sticky=tk.SE, padx=10, pady=10)
 
     def set_up_canvas_label(self, set_frame):
         for i in range(2):
             label = tk.Label(
-                set_frame,
-                text=self.canvas_title[i],
-                bg="white",
-                relief=tk.RIDGE,
+                set_frame, text=self.canvas_title[i], bg="white", relief=tk.RIDGE,
             )
-            label.grid(row=0, column=i, sticky=tk.W + tk.E)    
-    
-    def set_up_canvas_frame(self, set_frame):  
+            label.grid(row=0, column=i, sticky=tk.W + tk.E)
+
+    def set_up_canvas_frame(self, set_frame):
         return tk.Canvas(set_frame, width=500, height=500, bg="#A9A9A9")
-        
-    def set_up_scale_label(self, set_frame):    
+
+    def set_up_scale_label(self, set_frame):
         for i in range(4):
             label = tk.Label(set_frame, text=self.scale_effect[i])
             label.grid(row=i, column=0, sticky=tk.W)
-            
-    def set_up_opr_btn(self, set_frame, btn_name, act_command):    
+
+    def set_up_opr_btn(self, set_frame, btn_name, act_command):
         return tk.Button(set_frame, text=btn_name, width=10, command=act_command)
 
     def set_up_scale(self, set_frame, scale_end):
@@ -148,7 +141,7 @@ class Set_gui:
             command=self.adjust_scale_value,
         )
         return set_scale
-        
+
     def on_click_save(self):
         self.img_path_var = self.img_path_stvar.get()
         self.control.save_image_action(self.converted_img, self.img_path_var)

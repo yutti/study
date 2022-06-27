@@ -22,7 +22,6 @@ class GUI_model:
             fpath = name + "_" + dt.strftime("%H%M%S") + ".png"
 
             save_img.save(fpath)
-            # print("Saved: {}".format(fpath))
 
     def resize_image(self, path, base_canvas, effect_canvas):
 
@@ -60,12 +59,10 @@ class GUI_model:
 
     # effect image model
     def retouch_gray_scale(self, ef_img):
-        convert_img = ef_img.convert("L")
-        return convert_img
+        return ef_img.convert("L")
 
     def retouch_binarization(self, ef_img):
-        converted_img = ef_img.point(lambda x: 0 if x < 230 else x)
-        return converted_img
+        return ef_img.point(lambda x: 0 if x < 230 else x)
 
     def retouch_sepia(self, ef_img):
         converted_img = Image.merge(
@@ -79,55 +76,45 @@ class GUI_model:
         return converted_img
 
     def retouch_jagged_mosaic(self, ef_img):
-        converted_img = ef_img.resize([x // 8 for x in ef_img.size]).resize(ef_img.size)
-        return converted_img
+        return ef_img.resize([x // 8 for x in ef_img.size]).resize(ef_img.size)
 
     def retouch_soft_mosaic(self, ef_img):
         gimg = ef_img.filter(ImageFilter.GaussianBlur(4))
-        converted_img = gimg.resize([x // 8 for x in ef_img.size]).resize(ef_img.size)
-        return converted_img
+        return gimg.resize([x // 8 for x in ef_img.size]).resize(ef_img.size)
 
     def retouch_alpha_blend(self, ef_img):
-        converted_img = ef_img.quantize(4)
-        return converted_img
+        return ef_img.quantize(4)
 
     def retouch_invert(self, ef_img):
-        converted_img = ImageOps.invert(ef_img.convert("RGB"))
-        return converted_img
+        return ImageOps.invert(ef_img.convert("RGB"))
 
     def retouch_mirror(self, ef_img):
-        converted_img = ImageOps.mirror(ef_img.convert("RGB"))
-        return converted_img
+        return ImageOps.mirror(ef_img.convert("RGB"))
 
     def retouch_flip(self, ef_img):
-        converted_img = ImageOps.flip(ef_img.convert("RGB"))
-        return converted_img
+        return ImageOps.flip(ef_img.convert("RGB"))
 
     def retouch_posterize(self, ef_img):
-        converted_img = ImageOps.posterize(ef_img.convert("RGB"), 2)
-        return converted_img
+        return ImageOps.posterize(ef_img.convert("RGB"), 2)
 
     def retouch_solarize(self, ef_img):
-        converted_img = ImageOps.solarize(ef_img.convert("RGB"), 128)
-        return converted_img
+        return ImageOps.solarize(ef_img.convert("RGB"), 128)
 
     def retouch_equalize(self, ef_img):
-        converted_img = ImageOps.equalize(ef_img.convert("RGB"))
-        return converted_img
+        return ImageOps.equalize(ef_img.convert("RGB"))
 
     def retouch_counter(self, ef_img):
-        converted_img = ef_img.filter(ImageFilter.CONTOUR)
-        return converted_img
+        return ef_img.filter(ImageFilter.CONTOUR)
 
     def retouch_emboss(self, ef_img):
-        converted_img = ef_img.filter(ImageFilter.EMBOSS)
-        return converted_img
+        return ef_img.filter(ImageFilter.EMBOSS)
 
     def retouch_findemboss(self, ef_img):
-        converted_img = ef_img.filter(ImageFilter.FIND_EDGES)
-        return converted_img
+        return ef_img.filter(ImageFilter.FIND_EDGES)
 
-    def retouch_scale_items(self, ef_img, color_value, contrast_value, bright_value, sharp_value):
+    def retouch_scale_items(
+        self, ef_img, color_value, contrast_value, bright_value, sharp_value
+    ):
         enhancer = ImageEnhance.Color(ef_img)
         temp_img = enhancer.enhance(float(color_value))
         enhancer = ImageEnhance.Contrast(temp_img)

@@ -30,18 +30,16 @@ class GUI_control:
 
         func_no = func_combobox.current()
         func_name = func_combobox.get()
+        convert_gray_img = self.model.retouch_gray_scale(effect_img)
 
-        if func_no <= 3 and func_no >= 1:
-            convert_img = self.model.retouch_gray_scale(effect_img)
+        if func_name == "Gray_scale":
+            converted_img = convert_gray_img
 
-            if func_name == "Gray_scale":
-                converted_img = convert_img
+        elif func_name == "Binarization":
+            converted_img = self.model.retouch_binarization(convert_gray_img)
 
-            elif func_name == "Binarization":
-                converted_img = self.model.retouch_binarization(convert_img)
-
-            elif func_name == "Sepia":
-                converted_img = self.model.retouch_sepia(convert_img)
+        elif func_name == "Sepia":
+            converted_img = self.model.retouch_sepia(convert_gray_img)
 
         elif func_name == "Default":
             converted_img = effect_img
