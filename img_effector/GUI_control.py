@@ -5,16 +5,14 @@ class GUI_control:
     def __init__(self):
         self.model = GUI_model()
 
-    # Function for closing window
-
     def save_image_action(self, save_img, path_bar):
         self.model.save_image(save_img, path_bar)
 
     def adjust_color_balance(
-        self, effect_img, color_value, contrast_value, brightnes_value, sharpness_value
+        self, effect_img, color_value, contrast_value, bright_value, sharp_value
     ):
         converted_img = self.model.retouch_scale_items(
-            effect_img, color_value, contrast_value, brightnes_value, sharpness_value
+            effect_img, color_value, contrast_value, bright_value, sharp_value
         )
         return converted_img
 

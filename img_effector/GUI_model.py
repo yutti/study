@@ -127,20 +127,13 @@ class GUI_model:
         converted_img = ef_img.filter(ImageFilter.FIND_EDGES)
         return converted_img
 
-    # def retouch_color_balance(self, ef_img,value):
-    #    enhancer = ImageEnhance.Color(ef_img)
-    ##    converted_img = enhancer.enhance(float(value))
-    #    return converted_img
-
-    def retouch_scale_items(
-        self, ef_img, color_value, contrast_value, brightnes_value, sharpness_value
-    ):
+    def retouch_scale_items(self, ef_img, color_value, contrast_value, bright_value, sharp_value):
         enhancer = ImageEnhance.Color(ef_img)
         temp_img = enhancer.enhance(float(color_value))
         enhancer = ImageEnhance.Contrast(temp_img)
         temp_img = enhancer.enhance(float(contrast_value))
         enhancer = ImageEnhance.Brightness(temp_img)
-        temp_img = enhancer.enhance(float(brightnes_value))
+        temp_img = enhancer.enhance(float(bright_value))
         enhancer = ImageEnhance.Sharpness(temp_img)
-        converted_img = enhancer.enhance(float(sharpness_value))
+        converted_img = enhancer.enhance(float(sharp_value))
         return converted_img
