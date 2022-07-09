@@ -20,6 +20,7 @@ class Set_gui:
         self.thread_set = False
         self.start_movie = False
         self.video_frame = None
+        self.video_cap = None
 
         # Main window
         self.main_window = main_window
@@ -76,6 +77,7 @@ class Set_gui:
         self.movie_path = self.get_path()
         self.path_stvar.set(self.movie_path)
         self.run_one_frame()
+
         # Movie standby.
         self.thread_set = True
         self.thread_main = threading.Thread(target=self.main_thread_func)
@@ -94,13 +96,15 @@ class Set_gui:
         self.run_one_frame()
 
     def on_click_close(self):
+
+        self.start_movie = False
         self.set_movie = False
 
         # Block the calling thread until the thread represented by this instance end.
         if self.thread_set == True:
             self.thread_main.join()
+            self.video_cap.release()
 
-        self.video_cap.release()
         self.main_window.destroy()
 
     def main_thread_func(self):
@@ -114,15 +118,19 @@ class Set_gui:
         while self.set_movie:
 
             if self.start_movie:
-
                 ret, self.video_frame = self.video_cap.read()
 
                 if ret:
                     # convert color order from BGR to RGB
                     pil = self.cvtopli_color_convert(self.video_frame)
+                    self.effect_img = self.resize_image(pil)
 
-                    self.effect_img, self.canvas_create = self.resize_image(
-                        pil, self.canvas
+                    # To escape error. when close,not to run ImageTk.PhotoImage.
+                    if self.set_movie == False:
+                        break
+
+                    self.canvas_create = self.resizeimg_canvas(
+                        self.effect_img, self.canvas
                     )
                     self.replace_canvas_image(
                         self.effect_img, self.canvas, self.canvas_create
@@ -142,7 +150,8 @@ class Set_gui:
             # convert color order from BGR to RGB
             pil = self.cvtopli_color_convert(self.video_frame)
 
-            self.effect_img, self.canvas_create = self.resize_image(pil, self.canvas)
+            self.effect_img = self.resize_image(pil)
+            self.canvas_create = self.resizeimg_canvas(self.effect_img, self.canvas)
             # scale value intialize
             self.replace_canvas_image(self.effect_img, self.canvas, self.canvas_create)
 
@@ -155,19 +164,27 @@ class Set_gui:
         return Image.fromarray(rgb)
 
     # Model
-    def resize_image(self, img, canvas):
+    def resize_image(self, img):
 
         w = img.width
         h = img.height
-        w_offset = 250 - (w * (500 / h) / 2)
-        h_offset = 250 - (h * (700 / w) / 2)
 
         if w > h:
-            resized_img = img.resize((int(w * (700 / w)), int(h * (700 / w))))
+            resize_img = img.resize((int(w * (700 / w)), int(h * (700 / w))))
         else:
-            resized_img = img.resize((int(w * (500 / h)), int(h * (500 / h))))
+            resize_img = img.resize((int(w * (500 / h)), int(h * (500 / h))))
+
+        return resize_img
+
+    def resizeimg_canvas(self, resized_img, canvas):
+
+        w = resized_img.width
+        h = resized_img.height
+        w_offset = 350 - (w / 2)
+        h_offset = 250 - (h / 2)
 
         self.pil_img = ImageTk.PhotoImage(resized_img)
+
         canvas.delete("can_pic")
 
         if w > h:
@@ -180,7 +197,7 @@ class Set_gui:
                 w_offset, 0, anchor="nw", image=self.pil_img, tag="can_pic"
             )
 
-        return resized_img, resized_img_canvas
+        return resized_img_canvas
 
     def get_path(self):
         return filedialog.askopenfilename(
