@@ -29,27 +29,39 @@ class Set_gui:
 
         # Sub window
         self.canvas_frame = tk.Frame(self.main_window, height=450, width=400)
+        # self.scale_frame = tk.Frame(self.main_window, height=100, width=400)
         self.path_frame = tk.Frame(self.main_window, height=100, width=400)
         self.opr_frame = tk.Frame(self.main_window, height=100, width=400)
 
         # Widgetsmith
         self.canvas_frame.place(relx=0.05, rely=0.05)
+        # self.scale_frame.place(relx=0.05, rely=0.80)
         self.path_frame.place(relx=0.60, rely=0.2)
         self.opr_frame.place(relx=0.60, rely=0.5)
 
         # 1.1 canvas_frame (label)
-        self.label = tk.Label(
-            self.canvas_frame, text="Movie", bg="white", relief=tk.RIDGE
-        )
-        self.label.grid(row=0, column=0, sticky=tk.W + tk.E)
+        # self.label = tk.Label(
+        #    self.canvas_frame, text="Movie", bg="white", relief=tk.RIDGE
+        # )
+        # self.label.grid(row=0, column=0, sticky=tk.W + tk.E)
+        self.label_grid(self.canvas_frame, "white", 0, 0)
 
         # 1.2 canvas_frame (canvas)
         self.canvas = tk.Canvas(self.canvas_frame, width=700, height=500, bg="#A9A9A9")
         self.canvas.grid(row=1, column=0)
 
-        # 2 path_frame
-        self.button = self.opr_btn(self.path_frame, "File", self.on_click_path)
-        self.button.grid(row=0, column=0, sticky=tk.W, padx=10, pady=10)
+        # 2 scale_frame
+        # self.label = tk.Label(self.scale_frame, text="scale")
+        # self.label.grid(row=0, column=0, sticky=tk.W)
+
+        # self.cap_scale = self.set_up_cap_scale(self.scale_frame)
+        # self.cap_scale.grid(row=0, column=0, sticky=tk.W, padx=10, pady=10)
+        # self.cap_scale.grid(row=1, column=0, sticky=tk.W)
+
+        # 3 path_frame
+        # self.button = self.opr_btn(self.path_frame, "File", self.on_click_path)
+        # self.button.grid(row=0, column=0, sticky=tk.W, padx=10, pady=10)
+        self.btn_grid(self.path_frame, "Start", self.on_click_path, 0, 0, tk.W)
 
         self.path_stvar = tk.StringVar()
         self.path_entry = tk.Entry(
@@ -57,26 +69,50 @@ class Set_gui:
         )
         self.path_entry.grid(row=1, column=0, sticky=tk.EW, padx=10)
 
-        # 3 opr_frame
-        self.button = self.opr_btn(self.opr_frame, "Start", self.on_click_start)
-        self.button.grid(row=1, column=0, sticky=tk.SE, padx=10, pady=10)
+        # 4 opr_frame
+        # self.button = self.opr_btn(self.opr_frame, "Start", self.on_click_start)
+        # self.button.grid(row=1, column=0, sticky=tk.SE, padx=10, pady=10)
+        self.btn_grid(self.opr_frame, "Start", self.on_click_start, 1, 0, tk.SE)
 
-        self.button = self.opr_btn(self.opr_frame, "Stop", self.on_click_stop)
-        self.button.grid(row=1, column=1, sticky=tk.SE, padx=10, pady=10)
+        # self.button = self.opr_btn(self.opr_frame, "Stop", self.on_click_stop)
+        # self.button.grid(row=1, column=1, sticky=tk.SE, padx=10, pady=10)
+        self.btn_grid(self.opr_frame, "Stop", self.on_click_stop, 1, 1, tk.SE)
 
-        self.button = self.opr_btn(self.opr_frame, "Reset", self.on_click_reset)
-        self.button.grid(row=1, column=2, sticky=tk.SE, padx=10, pady=10)
+        # self.button = self.opr_btn(self.opr_frame, "Reset", self.on_click_reset)
+        # self.button.grid(row=1, column=2, sticky=tk.SE, padx=10, pady=10)
+        self.btn_grid(self.opr_frame, "Reset", self.on_click_reset, 1, 2, tk.SE)
 
-        self.button = self.opr_btn(self.opr_frame, "Exit", self.on_click_close)
-        self.button.grid(row=3, column=2, sticky=tk.SE, padx=10, pady=10)
+        # self.button = self.opr_btn(self.opr_frame, "Exit", self.on_click_close)
+        # self.button.grid(row=3, column=2, sticky=tk.SE, padx=10, pady=10)
+        self.btn_grid(self.opr_frame, "Exit", self.on_click_close, 3, 2, tk.SE)
 
-    def opr_btn(self, set_frame, btn_name, act_command):
-        return tk.Button(set_frame, text=btn_name, width=10, command=act_command)
+    # def opr_btn(self, set_frame, btn_name, act_command):
+    #    return tk.Button(set_frame, text=btn_name, width=10, command=act_command)
+
+    def label_grid(self, set_frame, title, r_num, c_num):
+        label = tk.Label(set_frame, text=title, bg="white", relief=tk.RIDGE)
+        return label.grid(row=r_num, column=c_num, sticky=tk.W + tk.E)
+
+    def btn_grid(self, set_frame, btn_name, act_command, r_num, c_num, stk):
+        button = tk.Button(set_frame, text=btn_name, width=10, command=act_command)
+        return button.grid(row=r_num, column=c_num, sticky=stk, padx=10, pady=10)
+
+    def set_up_cap_scale(self, set_frame):
+        set_scale = tk.Scale(
+            set_frame,
+            from_=0,
+            to=100,
+            resolution=1,
+            length=700,
+            orient=tk.HORIZONTAL,
+            command=self.adjust_scale_value,
+        )
+        return set_scale
 
     def on_click_path(self):
         self.movie_path = self.get_path()
         self.path_stvar.set(self.movie_path)
-        self.run_one_frame()
+        # self.run_one_frame()
 
         # Movie standby.
         self.thread_set = True
@@ -110,6 +146,11 @@ class Set_gui:
     def main_thread_func(self):
 
         self.video_cap = cv2.VideoCapture(self.movie_path)
+        self.total_frame_count = int(self.video_cap.get(cv2.CAP_PROP_FRAME_COUNT))
+        fps = int(self.video_cap.get(cv2.CAP_PROP_FPS))
+        print("fps:", fps)
+        FPS = 1 / (fps * 3)
+
         ret, self.video_frame = self.video_cap.read()
 
         if self.video_frame is None:
@@ -135,8 +176,21 @@ class Set_gui:
                     self.replace_canvas_image(
                         self.effect_img, self.canvas, self.canvas_create
                     )
+                    time.sleep(FPS)
                 else:
                     self.start_movie = False
+
+    def adjust_scale_value(self, value):
+
+        if self.video_frame is None:
+            print("None")
+
+        else:
+            cap_scale = self.cap_scale.get()
+            total_frame_count = int(self.video_cap.get(cv2.CAP_PROP_FRAME_COUNT))
+            read_cap_num = total_frame_count * (1 + cap_scale / 100)
+            self.video_cap.set(cv2.CAP_PROP_POS_FRAMES, read_cap_num)
+            self.run_one_frame()
 
     def run_one_frame(self):
         self.video_cap = cv2.VideoCapture(self.movie_path)
@@ -201,7 +255,7 @@ class Set_gui:
 
     def get_path(self):
         return filedialog.askopenfilename(
-            title="Please select image file,", filetypes=self.file_filter
+            title="Please select image file", filetypes=self.file_filter
         )
 
 
