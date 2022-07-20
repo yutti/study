@@ -11,7 +11,7 @@ class gui:
     def __init__(self, main_window):
 
         # Variable setting
-        self.bulb = yeelight.Bulb("192.168.10.103")  # Set up IP address for yeelight.
+        self.bulb = yeelight.Bulb("XXX.XXX.XX.XXX")  # Set up IP address for yeelight.
         self.function_btn = [
             "alarm",
             "christmas",
