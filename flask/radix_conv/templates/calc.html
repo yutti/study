@@ -1,0 +1,29 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>radix converte page</title>
+	</head>
+	<body>
+	<h1>2進数/10進数/16進数変換ツール</h1>
+	<form action='/calc' method='POST'>
+		<p>入力する基数：
+			<select name="radix_name">
+			{% for i in radix_list %}
+				<option value="{{ i }}">{{ i }}</option>
+			{% endfor %}
+			</select>
+		</p>
+		<p>bin: 2進数 / dec: 10進数 / hex: 16進数</p>
+		<input name='radix_num' type='text' placeholder='20'>
+		<input type='submit' value='計算'>
+	</form>
+	{%if base_radix%}
+	<p>{{base_name}}は、{{base_radix}}</p>
+	<p>{{conv1_name}}は、{{conv1_radix}}</p>
+	<p>{{conv2_name}}は、{{conv2_radix}}</p>
+	{%else%}
+	<p>{{error}}</p>
+	{%endif%}
+	</body>
+</html>
